@@ -12,14 +12,13 @@ io.on('connection', (socket) => {
     socket.emit('updateData', tasks); // Jako callback dla tego nasłuchiwacza ustaw funkcję, której zadaniem będzie natychmiastowe emitowanie tylko do tego nowego użytkownika zdarzenia updateData. Wraz z samym zdarzeniem koniecznie wysyłana musi być też sama tablica tasks.
     console.log('New task! Its id – ' + socket.id);
     
-    socket.on('addTask', (task) => {
-        let newTask = { name: task.name };
+    socket.on('addTask', (newTask) => {
         tasks.push(newTask);
-        socket.broadcast.emit('addTask', newTask);
+        socket.broadcast.emit('updateData', tasks);
     });
 
-    socket.on('removeTask', (index) => {
-        tasks.splice(index, 1);
+    socket.on('removeTask', (id) => {
+        tasks.splice(id, 1);
         socket.broadcast.emit('updateData', tasks);
     });
 
